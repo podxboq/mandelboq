@@ -39,4 +39,12 @@ public class Plano {
 			x += rejillaX;
 		}
 	}
+
+	public Complex getW0() {
+		return W0;
+	}
+
+	public Complex getW1() {
+		return W1;
+	}
 }

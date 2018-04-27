@@ -14,6 +14,7 @@ import org.apache.commons.math3.complex.Complex;
 import org.podxboq.mandelboq.maths.AfinT;
 import org.podxboq.mandelboq.maths.Plano;
 import org.podxboq.mandelboq.ui.MainMenu;
+import org.podxboq.mandelboq.ui.View;
 
 public class Main extends Application {
 
@@ -40,23 +41,10 @@ public class Main extends Application {
 	}
 
 	private void test(Canvas c) {
-		Plano p = new Plano();
-		p.setVisible(new Complex(-1, -1), new Complex(1, 1));
-		p.updateCanvas(c);
-		//p.render();
-		AfinT phi = new AfinT();
-		phi.setView(c.getWidth(), c.getHeight());
-		phi.setPlano(new Complex(-2, -2), new Complex(2, 2));
-		final PixelWriter pixelWriter = c.getGraphicsContext2D().getPixelWriter();
-		for (int i = 0; i < c.getWidth(); i++) {
-			for (int j = 0; j < c.getHeight(); j++) {
-				Complex z = phi.img(new Complex(i, j));
-				if (z.abs() < 2) {
-					pixelWriter.setColor(i, j, Color.BLACK);
-				}
-				System.out.println(z.getReal() + "+i " + z.getImaginary());
-			}
-		}
+		Plano plano = new Plano();
+		plano.setVisible(new Complex(-2, -2), new Complex(2, 2));
+		View view = new View(c, plano);
+		view.render();
 	}
 
 	public static void main(String[] args) {
