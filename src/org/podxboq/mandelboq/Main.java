@@ -1,50 +1,32 @@
 package org.podxboq.mandelboq;
 
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.apache.commons.math3.complex.Complex;
-import org.podxboq.mandelboq.maths.AfinT;
-import org.podxboq.mandelboq.maths.Plano;
-import org.podxboq.mandelboq.ui.MainMenu;
-import org.podxboq.mandelboq.ui.View;
+import org.podxboq.mandelboq.controllers.MainController;
+import org.podxboq.mandelboq.ui.ParamsBar;
 
 public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		Parent root = new Group();
-		primaryStage.setTitle("Mandelbrot");
+		final Canvas canvas = new Canvas(500, 500);
+		MainController mainController = new MainController(canvas, new Complex(-1.6, -1), new Complex(0.5, 1));
 
 		BorderPane borderPane = new BorderPane();
-		final Canvas canvas = new Canvas(500, 500);
 		borderPane.setCenter(canvas);
-		Scene scene = new Scene(borderPane);
 
-		((Group) root).getChildren().addAll(new MainMenu());
+		ParamsBar pb = new ParamsBar(mainController);
+
+		borderPane.setTop(pb);
+
+		Scene scene = new Scene(borderPane);
+		primaryStage.setTitle("Mandelbrot");
 		primaryStage.setScene(scene);
 		primaryStage.show();
-
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				test(canvas);
-			}
-		});
-	}
-
-	private void test(Canvas c) {
-		Plano plano = new Plano();
-		plano.setVisible(new Complex(-2, -2), new Complex(2, 2));
-		View view = new View(c, plano);
-		view.render();
 	}
 
 	public static void main(String[] args) {
