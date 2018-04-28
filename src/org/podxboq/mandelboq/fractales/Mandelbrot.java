@@ -1,23 +1,25 @@
 package org.podxboq.mandelboq.fractales;
 
-import javafx.scene.paint.Color;
 import org.apache.commons.math3.complex.Complex;
 
 public class Mandelbrot {
 
-	Complex C;
+	private Complex C;
 
-	public Color color(Complex z) {
+	public int color(Complex z) {
 		C = z;
 		Complex z1 = new Complex(0, 0);
-		for (int i = 0; i < 500; i++) {
+		final int max = 500;
+		int i = 0;
+		while (i < max) {
 			if (z1.abs() > 2) {
-				return Color.WHITE;
+				return i;
 
 			}
 			z1 = itera(z1);
+			i++;
 		}
-		return Color.BLACK;
+		return max;
 	}
 
 	private Complex itera(Complex z) {

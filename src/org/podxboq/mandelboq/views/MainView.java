@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 import org.apache.commons.math3.complex.Complex;
 import org.podxboq.mandelboq.fractales.Mandelbrot;
 import org.podxboq.mandelboq.maths.AfinT;
+import org.podxboq.mandelboq.ui.palettes.PresetPalette;
 
 public class MainView extends Task {
 
@@ -28,6 +29,7 @@ public class MainView extends Task {
 
 	@Override
 	protected Object call() {
+		PresetPalette presetPalette = new PresetPalette(1);
 		final int TASK_MAX = (int) (canvas.getWidth() * canvas.getHeight());
 		WritableImage wImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
 		final PixelWriter pixelWriter = wImage.getPixelWriter();
@@ -37,18 +39,19 @@ public class MainView extends Task {
 			for (int j = 0; j < canvas.getHeight(); j++) {
 				contador++;
 				Complex z = getImage(i, j);
-				Color color = mandelbrot.color(z);
+				int itera = mandelbrot.color(z);
 				updateProgress(contador, TASK_MAX);
-				pixelWriter.setColor(i, j, color);
-
+				int intColor = 0;
+				if (itera < 500) {
+					intColor = presetPalette.getPaletteColor(itera);
+				}
+				int red = (intColor >> 16) & 0xff;
+				int green = (intColor >> 8) & 0xff;
+				int blue = intColor & 0xff;
+				pixelWriter.setColor(i, j, Color.rgb(red, green, blue));
 			}
 		}
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				canvas.getGraphicsContext2D().drawImage(wImage, 0, 0);
-			}
-		});
+		Platform.runLater(() -> canvas.getGraphicsContext2D().drawImage(wImage, 0, 0));
 
 		return null;
 	}
