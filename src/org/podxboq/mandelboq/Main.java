@@ -3,6 +3,7 @@ package org.podxboq.mandelboq;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.apache.commons.math3.complex.Complex;
@@ -20,8 +21,13 @@ public class Main extends Application {
 		borderPane.setCenter(canvas);
 
 		ParamsBar pb = new ParamsBar(mainController);
-
 		borderPane.setTop(pb);
+
+		ProgressBar progressBar;
+		progressBar = new ProgressBar();
+		progressBar.setPrefWidth(canvas.getWidth());
+		progressBar.progressProperty().bind(mainController.getView().progressProperty());
+		borderPane.setBottom(progressBar);
 
 		Scene scene = new Scene(borderPane);
 		primaryStage.setTitle("Mandelbrot");

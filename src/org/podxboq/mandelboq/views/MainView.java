@@ -1,56 +1,55 @@
 package org.podxboq.mandelboq.views;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import org.apache.commons.math3.complex.Complex;
 import org.podxboq.mandelboq.fractales.Mandelbrot;
 import org.podxboq.mandelboq.maths.AfinT;
-import org.podxboq.mandelboq.maths.Plano;
 
-import javax.swing.*;
+public class MainView extends Task {
 
-public class MainView extends JFrame implements Observable {
-
-	private Plano plano;
 	private Canvas canvas;
 	private AfinT phi;
 
-	public MainView(Canvas canvas, Plano plano) {
+	public MainView(Canvas canvas, Complex x, Complex y) {
 		this.canvas = canvas;
-		this.plano = plano;
-		this.plano.updateCanvas(canvas);
 		phi = new AfinT();
 		phi.setView(canvas.getWidth(), canvas.getHeight());
-		phi.setPlano(plano.getW0(), plano.getW1());
+		phi.setPlano(x, y);
 	}
 
 	private Complex getImage(double x, double y) {
 		return phi.img(new Complex(x, y));
 	}
 
-	public void render() {
-		final PixelWriter pixelWriter = canvas.getGraphicsContext2D().getPixelWriter();
+	@Override
+	protected Object call() {
+		final int TASK_MAX = (int) (canvas.getWidth() * canvas.getHeight());
+		WritableImage wImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+		final PixelWriter pixelWriter = wImage.getPixelWriter();
 		Mandelbrot mandelbrot = new Mandelbrot();
+		int contador = 0;
 		for (int i = 0; i < canvas.getWidth(); i++) {
 			for (int j = 0; j < canvas.getHeight(); j++) {
+				contador++;
 				Complex z = getImage(i, j);
-				pixelWriter.setColor(i, j, mandelbrot.color(z));
-				validate();
+				Color color = mandelbrot.color(z);
+				updateProgress(contador, TASK_MAX);
+				pixelWriter.setColor(i, j, color);
+
 			}
 		}
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				canvas.getGraphicsContext2D().drawImage(wImage, 0, 0);
+			}
+		});
 
-	}
-
-	@Override
-	public void addListener(InvalidationListener listener) {
-
-	}
-
-	@Override
-	public void removeListener(InvalidationListener listener) {
-
+		return null;
 	}
 }
