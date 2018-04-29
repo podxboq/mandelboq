@@ -1,20 +1,18 @@
 package org.podxboq.mandelboq.ui;
 
-import javafx.scene.paint.Color;
-
 public class Pixel {
 	private int x;
 	private int y;
-	private Color color;
+	private int iteraciones;
 
-	public Pixel(int x, int y, Color color) {
-		this.color = color;
+	public Pixel(int x, int y, int iteraciones) {
+		this.iteraciones = iteraciones;
 		this.x = x;
 		this.y = y;
 	}
 
 	public Pixel(int x, int y) {
-		this(x, y, Color.WHITE);
+		this(x, y, 0);
 	}
 
 	public Pixel() {
@@ -37,11 +35,11 @@ public class Pixel {
 		this.y = y;
 	}
 
-	public Color getColor() {
-		return color;
+	public int getIteraciones() {
+		return iteraciones;
 	}
 
-	public void setColor(Color color) {
-		this.color = color;
+	public void setIteraciones(int iteraciones) {
+		this.iteraciones = iteraciones;
 	}
 }
