@@ -14,6 +14,7 @@ public class ParamsBar extends ButtonBar {
 		Button render = new Button("Pintar");
 		render.setOnAction(event -> new Thread(mainController.getView()).start());
 		cbPalettes.getItems().addAll(PresetPalette.PRESETS_PALETTES);
+		cbPalettes.setOnAction(event -> mainController.getView().colorear());
 		getButtons().addAll(render, cbPalettes);
 	}
 

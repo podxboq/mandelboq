@@ -9,12 +9,17 @@ import org.apache.commons.math3.complex.Complex;
 import org.podxboq.mandelboq.fractales.Mandelbrot;
 import org.podxboq.mandelboq.maths.AfinT;
 import org.podxboq.mandelboq.ui.ParamsBar;
+import org.podxboq.mandelboq.ui.Pixel;
 import org.podxboq.mandelboq.ui.palettes.Palette;
+
+import java.util.ArrayList;
 
 public class MainView extends Task {
 
 	private Canvas canvas;
 	private AfinT phi;
+	private Palette palette;
+	private ArrayList<Pixel> mascara = new ArrayList<>();
 
 	public MainView(Canvas canvas, Complex x, Complex y) {
 		this.canvas = canvas;
@@ -29,10 +34,7 @@ public class MainView extends Task {
 
 	@Override
 	protected Object call() {
-		Palette palette = ParamsBar.cbPalettes.getSelectionModel().getSelectedItem();
 		final int TASK_MAX = (int) (canvas.getWidth() * canvas.getHeight());
-		WritableImage wImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
-		final PixelWriter pixelWriter = wImage.getPixelWriter();
 		Mandelbrot mandelbrot = new Mandelbrot();
 		int contador = 0;
 		for (int i = 0; i < canvas.getWidth(); i++) {
@@ -40,12 +42,21 @@ public class MainView extends Task {
 				contador++;
 				Complex z = getImage(i, j);
 				int itera = mandelbrot.color(z);
+				mascara.add(new Pixel(i, j, itera));
 				updateProgress(contador, TASK_MAX);
-				pixelWriter.setColor(i, j, palette.getColor(itera));
 			}
 		}
-		Platform.runLater(() -> canvas.getGraphicsContext2D().drawImage(wImage, 0, 0));
-
+		colorear();
 		return null;
+	}
+
+	public void colorear() {
+		palette = ParamsBar.cbPalettes.getSelectionModel().getSelectedItem();
+		WritableImage wImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+		final PixelWriter pixelWriter = wImage.getPixelWriter();
+		for (Pixel p : mascara) {
+			pixelWriter.setColor(p.getX(), p.getY(), palette.getColor(p.getIteraciones()));
+		}
+		Platform.runLater(() -> canvas.getGraphicsContext2D().drawImage(wImage, 0, 0));
 	}
 }
