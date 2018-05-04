@@ -8,14 +8,19 @@ import org.podxboq.mandelboq.ui.palettes.Palette;
 import org.podxboq.mandelboq.ui.palettes.PresetPalette;
 
 public class ParamsBar extends ButtonBar {
-	public static final ComboBox<Palette> cbPalettes = new ComboBox<>();
 
 	public ParamsBar(MainController mainController) {
-		Button render = new Button("Pintar");
-		render.setOnAction(event -> new Thread(mainController.getView()).start());
+		Button btnRender = new Button("Pintar");
+		btnRender.setOnAction(event -> new Thread(mainController.getView()).start());
+	  ComboBox<Palette> cbPalettes = new ComboBox<>();
 		cbPalettes.getItems().addAll(PresetPalette.PRESETS_PALETTES);
-		cbPalettes.setOnAction(event -> mainController.getView().colorear());
-		getButtons().addAll(render, cbPalettes);
+		cbPalettes.setOnAction(event -> {
+			mainController.getView().setPalette(cbPalettes.getSelectionModel().getSelectedItem());
+			mainController.getView().colorear();
+		});
+		Button btnAnim = new Button("Animar");
+		btnAnim.setOnAction(event -> mainController.getView().animar());
+		getButtons().addAll(btnRender, cbPalettes, btnAnim);
 	}
 
 }

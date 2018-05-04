@@ -1,14 +1,15 @@
 package org.podxboq.mandelboq.views;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import org.apache.commons.math3.complex.Complex;
 import org.podxboq.mandelboq.fractales.Mandelbrot;
 import org.podxboq.mandelboq.maths.AfinT;
-import org.podxboq.mandelboq.ui.ParamsBar;
 import org.podxboq.mandelboq.ui.Pixel;
 import org.podxboq.mandelboq.ui.palettes.Palette;
 
@@ -50,8 +51,11 @@ public class MainView extends Task {
 		return null;
 	}
 
+	public void setPalette(Palette palette) {
+		this.palette = palette;
+	}
+
 	public void colorear() {
-		palette = ParamsBar.cbPalettes.getSelectionModel().getSelectedItem();
 		WritableImage wImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
 		final PixelWriter pixelWriter = wImage.getPixelWriter();
 		for (Pixel p : mascara) {
@@ -59,4 +63,24 @@ public class MainView extends Task {
 		}
 		Platform.runLater(() -> canvas.getGraphicsContext2D().drawImage(wImage, 0, 0));
 	}
+
+	public void animar() {
+		WritableImage wImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
+		final PixelWriter pixelWriter = wImage.getPixelWriter();
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+
+		AnimationTimer loop = new AnimationTimer() {
+
+			@Override
+			public void handle(long now) {
+				palette.push();
+				for (Pixel p : mascara) {
+					pixelWriter.setColor(p.getX(), p.getY(), palette.getColor(p.getIteraciones()));
+				}
+				gc.drawImage(wImage, 0, 0);
+			}
+		};
+		loop.start();
+	}
+
 }

@@ -2,12 +2,15 @@ package org.podxboq.mandelboq.ui.palettes;
 
 import javafx.scene.paint.Color;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 public class Palette {
 
 	private String nombre;
-	private int[] colores;
+	private Integer[] colores;
 
-	Palette(String nombre, int[] colores) {
+	Palette(String nombre, Integer[] colores) {
 		this.nombre = nombre;
 		this.colores = colores;
 	}
@@ -30,6 +33,10 @@ public class Palette {
 		int green = (intColor >> 8) & 0xff;
 		int blue = intColor & 0xff;
 		return Color.rgb(red, green, blue);
+	}
+
+	public void push(){
+		Collections.rotate(Arrays.asList(colores), 1);
 	}
 
 }
