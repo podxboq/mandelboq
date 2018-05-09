@@ -30,4 +30,11 @@ public class AfinT {
 		double imgY = (b - d) / h * y + d;
 		return new Complex(imgX, imgY);
 	}
+
+	public void resizeAndCenter(double newW, double newH) {
+		Complex newD1 = img(new Complex((w - newW) / 2, (h + newH) / 2));
+		Complex newD2 = img(new Complex((w + newW) / 2, (h - newH) / 2));
+		setView(newW, newH);
+		setPlano(newD1, newD2);
+	}
 }

@@ -35,11 +35,19 @@ public class MainView extends Task {
 
 	@Override
 	protected Object call() {
+		resizeAndCenter();
+		System.out.println("Calculando");
+		mascara.clear();
+		phi.setView(canvas.getWidth(), canvas.getHeight());
 		final int TASK_MAX = (int) (canvas.getWidth() * canvas.getHeight());
 		Mandelbrot mandelbrot = new Mandelbrot();
 		int contador = 0;
 		for (int i = 0; i < canvas.getWidth(); i++) {
 			for (int j = 0; j < canvas.getHeight(); j++) {
+				if (isCancelled()) {
+					System.out.println("Cancelado");
+					break;
+				}
 				contador++;
 				Complex z = getImage(i, j);
 				int itera = mandelbrot.color(z);
@@ -56,6 +64,7 @@ public class MainView extends Task {
 	}
 
 	public void colorear() {
+		System.out.println("Coloreando: " + mascara.size());
 		WritableImage wImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
 		final PixelWriter pixelWriter = wImage.getPixelWriter();
 		for (Pixel p : mascara) {
@@ -83,4 +92,8 @@ public class MainView extends Task {
 		loop.start();
 	}
 
+	public void resizeAndCenter() {
+		System.out.println(canvas.getWidth());
+		phi.resizeAndCenter(canvas.getWidth(), canvas.getHeight());
+	}
 }

@@ -14,7 +14,11 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		primaryStage.setWidth(500);
+		primaryStage.setHeight(600);
 		final Canvas canvas = new Canvas(500, 500);
+		canvas.widthProperty().bind(primaryStage.widthProperty());
+		canvas.heightProperty().bind(primaryStage.heightProperty().subtract(100));
 		MainController mainController = new MainController(canvas, new Complex(-1.6, -1), new Complex(0.5, 1));
 
 		BorderPane borderPane = new BorderPane();
@@ -25,7 +29,7 @@ public class Main extends Application {
 
 		ProgressBar progressBar;
 		progressBar = new ProgressBar();
-		progressBar.setPrefWidth(canvas.getWidth());
+		progressBar.prefWidthProperty().bind(primaryStage.widthProperty());
 		progressBar.progressProperty().bind(mainController.getView().progressProperty());
 		borderPane.setBottom(progressBar);
 
