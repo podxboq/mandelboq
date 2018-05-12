@@ -16,8 +16,4 @@ public class MainController {
 		return mainView;
 	}
 
-	public void resizeAndCenter() {
-		mainView.resizeAndCenter();
-		new Thread(mainView).start();
-	}
 }

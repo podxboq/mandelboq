@@ -2,7 +2,9 @@ package org.podxboq.mandelboq.views;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
+import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
@@ -15,48 +17,25 @@ import org.podxboq.mandelboq.ui.palettes.Palette;
 
 import java.util.ArrayList;
 
-public class MainView extends Task {
+public class MainView {
 
 	private Canvas canvas;
-	private AfinT phi;
 	private Palette palette;
 	private ArrayList<Pixel> mascara = new ArrayList<>();
+	private FractalView fractalView;
 
 	public MainView(Canvas canvas, Complex x, Complex y) {
 		this.canvas = canvas;
-		phi = new AfinT();
-		phi.setView(canvas.getWidth(), canvas.getHeight());
-		phi.setPlano(x, y);
+		fractalView = new FractalView(canvas.getWidth(), canvas.getHeight(), x, y);
+		fractalView.setOnSucceeded(event -> colorear());
 	}
 
-	private Complex getImage(double x, double y) {
-		return phi.img(new Complex(x, y));
-	}
-
-	@Override
-	protected Object call() {
-		resizeAndCenter();
-		System.out.println("Calculando");
-		mascara.clear();
-		phi.setView(canvas.getWidth(), canvas.getHeight());
-		final int TASK_MAX = (int) (canvas.getWidth() * canvas.getHeight());
-		Mandelbrot mandelbrot = new Mandelbrot();
-		int contador = 0;
-		for (int i = 0; i < canvas.getWidth(); i++) {
-			for (int j = 0; j < canvas.getHeight(); j++) {
-				if (isCancelled()) {
-					System.out.println("Cancelado");
-					break;
-				}
-				contador++;
-				Complex z = getImage(i, j);
-				int itera = mandelbrot.color(z);
-				mascara.add(new Pixel(i, j, itera));
-				updateProgress(contador, TASK_MAX);
-			}
+	public void calcularYPintar() {
+		if (fractalView.getState() == Service.State.READY) {
+			fractalView.start();
+		}else if (fractalView.getState() == Service.State.SUCCEEDED){
+			fractalView.restart();
 		}
-		colorear();
-		return null;
 	}
 
 	public void setPalette(Palette palette) {
@@ -64,7 +43,7 @@ public class MainView extends Task {
 	}
 
 	public void colorear() {
-		System.out.println("Coloreando: " + mascara.size());
+		mascara = fractalView.getMascara();
 		WritableImage wImage = new WritableImage((int) canvas.getWidth(), (int) canvas.getHeight());
 		final PixelWriter pixelWriter = wImage.getPixelWriter();
 		for (Pixel p : mascara) {
@@ -92,8 +71,7 @@ public class MainView extends Task {
 		loop.start();
 	}
 
-	public void resizeAndCenter() {
-		System.out.println(canvas.getWidth());
-		phi.resizeAndCenter(canvas.getWidth(), canvas.getHeight());
+	public FractalView getFractalView() {
+		return fractalView;
 	}
 }

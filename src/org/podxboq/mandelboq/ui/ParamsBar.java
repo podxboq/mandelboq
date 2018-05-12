@@ -11,7 +11,7 @@ public class ParamsBar extends ButtonBar {
 
 	public ParamsBar(MainController mainController) {
 		Button btnRender = new Button("Pintar");
-		btnRender.setOnAction(event -> new Thread(mainController.getView()).start());
+		btnRender.setOnAction(event -> mainController.getView().calcularYPintar());
 	  ComboBox<Palette> cbPalettes = new ComboBox<>();
 		cbPalettes.getItems().addAll(PresetPalette.PRESETS_PALETTES);
 		cbPalettes.setOnAction(event -> {

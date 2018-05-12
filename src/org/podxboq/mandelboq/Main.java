@@ -30,7 +30,7 @@ public class Main extends Application {
 		ProgressBar progressBar;
 		progressBar = new ProgressBar();
 		progressBar.prefWidthProperty().bind(primaryStage.widthProperty());
-		progressBar.progressProperty().bind(mainController.getView().progressProperty());
+		progressBar.progressProperty().bind(mainController.getView().getFractalView().progressProperty());
 		borderPane.setBottom(progressBar);
 
 		Scene scene = new Scene(borderPane);
