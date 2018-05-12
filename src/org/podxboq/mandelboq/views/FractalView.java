@@ -28,7 +28,7 @@ public class FractalView extends Service<Void> {
 	protected Task<Void> createTask() {
 		return new Task<Void>() {
 			@Override
-			protected Void call() throws Exception {
+			protected Void call() {
 				mascara.clear();
 				phi.resizeAndCenter(width, height);
 				phi.setView(width, height);
@@ -52,7 +52,15 @@ public class FractalView extends Service<Void> {
 		};
 	}
 
-	public ArrayList<Pixel> getMascara() {
+	ArrayList<Pixel> getMascara() {
 		return mascara;
+	}
+
+	void setWidth(double w) {
+		width = w;
+	}
+
+	void setHeight(double h) {
+		height = h;
 	}
 }

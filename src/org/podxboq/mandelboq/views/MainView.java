@@ -3,15 +3,11 @@ package org.podxboq.mandelboq.views;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
-import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import org.apache.commons.math3.complex.Complex;
-import org.podxboq.mandelboq.fractales.Mandelbrot;
-import org.podxboq.mandelboq.maths.AfinT;
 import org.podxboq.mandelboq.ui.Pixel;
 import org.podxboq.mandelboq.ui.palettes.Palette;
 
@@ -31,6 +27,8 @@ public class MainView {
 	}
 
 	public void calcularYPintar() {
+		fractalView.setWidth(canvas.getWidth());
+		fractalView.setHeight(canvas.getHeight());
 		if (fractalView.getState() == Service.State.READY) {
 			fractalView.start();
 		}else if (fractalView.getState() == Service.State.SUCCEEDED){
