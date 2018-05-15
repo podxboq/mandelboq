@@ -8,6 +8,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.apache.commons.math3.complex.Complex;
 import org.podxboq.mandelboq.controllers.MainController;
+import org.podxboq.mandelboq.ui.MainCanvas;
 import org.podxboq.mandelboq.ui.ParamsBar;
 
 public class Main extends Application {
@@ -16,7 +17,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.setWidth(500);
 		primaryStage.setHeight(600);
-		final Canvas canvas = new Canvas(500, 500);
+		final MainCanvas canvas = new MainCanvas(500, 500);
 		canvas.widthProperty().bind(primaryStage.widthProperty());
 		canvas.heightProperty().bind(primaryStage.heightProperty().subtract(100));
 		MainController mainController = new MainController(canvas, new Complex(-1.6, -1), new Complex(0.5, 1));
