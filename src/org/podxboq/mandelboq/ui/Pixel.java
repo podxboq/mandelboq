@@ -11,6 +11,14 @@ public class Pixel {
 		this.y = y;
 	}
 
+	public Pixel(double x, double y) {
+		this((int) x, (int) y, 0);
+	}
+
+	public Pixel(int x, int y) {
+		this(x, y, 0);
+	}
+
 	public int getX() {
 		return x;
 	}

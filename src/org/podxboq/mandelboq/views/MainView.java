@@ -3,11 +3,12 @@ package org.podxboq.mandelboq.views;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.shape.Rectangle;
 import org.apache.commons.math3.complex.Complex;
+import org.podxboq.mandelboq.ui.MainCanvas;
 import org.podxboq.mandelboq.ui.Pixel;
 import org.podxboq.mandelboq.ui.palettes.Palette;
 
@@ -15,23 +16,24 @@ import java.util.ArrayList;
 
 public class MainView {
 
-	private Canvas canvas;
+	private MainCanvas canvas;
 	private Palette palette;
 	private ArrayList<Pixel> mascara = new ArrayList<>();
 	private FractalView fractalView;
 
-	public MainView(Canvas canvas, Complex x, Complex y) {
+	public MainView(MainCanvas canvas, Complex x, Complex y) {
 		this.canvas = canvas;
 		fractalView = new FractalView(canvas.getWidth(), canvas.getHeight(), x, y);
 		fractalView.setOnSucceeded(event -> colorear());
 	}
 
 	public void calcularYPintar() {
+		zoomToView();
 		fractalView.setWidth(canvas.getWidth());
 		fractalView.setHeight(canvas.getHeight());
 		if (fractalView.getState() == Service.State.READY) {
 			fractalView.start();
-		}else if (fractalView.getState() == Service.State.SUCCEEDED){
+		} else if (fractalView.getState() == Service.State.SUCCEEDED) {
 			fractalView.restart();
 		}
 	}
@@ -71,5 +73,17 @@ public class MainView {
 
 	public FractalView getFractalView() {
 		return fractalView;
+	}
+
+	private void zoomToView() {
+		Rectangle zoom = canvas.getZoomView();
+		if (zoom != null) {
+			canvas.zoomToView();
+			fractalView.setPlano(
+							fractalView.pixelToComplex(new Pixel(zoom.getX(), zoom.getY() + zoom.getHeight())),
+							fractalView.pixelToComplex(new Pixel(zoom.getX() + zoom.getWidth(), zoom.getY())));
+
+		}
+
 	}
 }

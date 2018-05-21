@@ -8,7 +8,7 @@ import javafx.scene.shape.Rectangle;
 public class MainCanvas extends Canvas {
 
 	private double starting_point_x, starting_point_y;
-
+	private Rectangle zoomView;
 	private boolean new_rectangle_is_being_drawn = false;
 
 	private Rectangle adjust_rectangle_properties(double starting_point_x,
@@ -56,9 +56,19 @@ public class MainCanvas extends Canvas {
 			}
 		});
 
-		this.setOnMouseReleased(event -> new_rectangle_is_being_drawn = false);
-
+		this.setOnMouseReleased(event -> {
+			new_rectangle_is_being_drawn = false;
+			Rectangle rectangle = adjust_rectangle_properties(starting_point_x, starting_point_y, event.getSceneX(), event.getSceneY());
+			zoomView = new Rectangle(rectangle.getX(), rectangle.getY() - 50, rectangle.getWidth(), rectangle.getHeight());
+		});
 	}
 
+	public Rectangle getZoomView() {
+		return zoomView;
+	}
+
+	public void zoomToView() {
+		zoomView = null;
+	}
 }
 

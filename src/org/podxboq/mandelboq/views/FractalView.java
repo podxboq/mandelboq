@@ -3,6 +3,7 @@ package org.podxboq.mandelboq.views;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import org.apache.commons.math3.complex.Complex;
+import org.podxboq.mandelboq.Constantes;
 import org.podxboq.mandelboq.fractales.Mandelbrot;
 import org.podxboq.mandelboq.maths.AfinT;
 import org.podxboq.mandelboq.ui.Pixel;
@@ -62,5 +63,21 @@ public class FractalView extends Service<Void> {
 
 	void setHeight(double h) {
 		height = h;
+	}
+
+	public Complex pixelToComplex(Pixel p) {
+		return phi.img(new Complex(p.getX(), p.getY()));
+	}
+
+	public Pixel recalculatePixel(Pixel p) {
+		if (p.getIteraciones() >= Constantes.MAX_ITERA) {
+			return p;
+		} else {
+			return p;
+		}
+	}
+
+	public void setPlano(Complex x, Complex y) {
+		phi.setPlano(x, y);
 	}
 }
