@@ -79,6 +79,7 @@ public class MainView {
 		Rectangle zoom = canvas.getZoomView();
 		if (zoom != null) {
 			canvas.zoomToView();
+			zoom = fractalView.getPhi().resizeWithProportion(zoom);
 			fractalView.setPlano(
 							fractalView.pixelToComplex(new Pixel(zoom.getX(), zoom.getY() + zoom.getHeight())),
 							fractalView.pixelToComplex(new Pixel(zoom.getX() + zoom.getWidth(), zoom.getY())));

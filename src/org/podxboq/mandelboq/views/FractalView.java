@@ -80,4 +80,8 @@ public class FractalView extends Service<Void> {
 	public void setPlano(Complex x, Complex y) {
 		phi.setPlano(x, y);
 	}
+
+	public AfinT getPhi() {
+		return phi;
+	}
 }

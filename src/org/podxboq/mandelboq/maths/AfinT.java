@@ -1,6 +1,9 @@
 package org.podxboq.mandelboq.maths;
 
 import org.apache.commons.math3.complex.Complex;
+import javafx.scene.shape.Rectangle;
+
+import java.awt.*;
 
 public class AfinT {
 
@@ -36,5 +39,17 @@ public class AfinT {
 		Complex newD2 = img(new Complex((w + newW) / 2, (h - newH) / 2));
 		setView(newW, newH);
 		setPlano(newD1, newD2);
+	}
+
+	public Rectangle resizeWithProportion(Rectangle t) {
+		double newProportion = t.getWidth() / t.getHeight();
+		double proportion = w / h;
+		double relation = proportion / newProportion;
+		if (relation > 1) {
+			t.setWidth(t.getHeight() / proportion);
+		} else if (relation < 1) {
+			t.setHeight(t.getWidth() * proportion);
+		}
+		return t;
 	}
 }
