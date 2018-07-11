@@ -14,8 +14,8 @@ public class FractalView extends Service<Void> {
 	private AfinT phi;
 	private double width;
 	private double height;
-	private ArrayList<Pixel> mascara = new ArrayList<>();
-
+	private ArrayList<Pixel> mascara = new ArrayList();
+	private Mandelbrot mandelbrot = new Mandelbrot();
 
 	FractalView(double w, double h, Complex x, Complex y) {
 		width = w;
@@ -34,7 +34,6 @@ public class FractalView extends Service<Void> {
 				phi.resizeAndCenter(width, height);
 				phi.setView(width, height);
 				final int TASK_MAX = (int) (width * height);
-				Mandelbrot mandelbrot = new Mandelbrot();
 				int contador = 0;
 				for (int i = 0; i < width; i++) {
 					for (int j = 0; j < height; j++) {
@@ -83,5 +82,9 @@ public class FractalView extends Service<Void> {
 
 	public AfinT getPhi() {
 		return phi;
+	}
+
+	public Mandelbrot getMandelbrot() {
+		return mandelbrot;
 	}
 }
